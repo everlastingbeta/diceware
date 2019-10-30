@@ -13,7 +13,7 @@ type Wordlist interface {
 	// appropriate word from the wordlist
 	Rolls() int
 
-	// SidesOfDice describes
+	// SidesOfDice describes the maximum number on the dice to be rolled
 	SidesOfDice() *big.Int
 }
 
