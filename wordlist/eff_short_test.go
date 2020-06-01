@@ -1,14 +1,14 @@
-package diceware_test
+package wordlist_test
 
 import (
 	"math/big"
 	"testing"
 
-	"github.com/everlastingbeta/diceware"
+	"github.com/everlastingbeta/diceware/wordlist"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestOriginalWordListFetchWord(t *testing.T) {
+func TestEFFShortFetchWord(t *testing.T) {
 	assert := assert.New(t)
 
 	tests := []struct {
@@ -18,8 +18,8 @@ func TestOriginalWordListFetchWord(t *testing.T) {
 	}{
 		{
 			Name:     "will return a value from the map",
-			DiceRoll: 11111,
-			Value:    "a",
+			DiceRoll: 1111,
+			Value:    "acid",
 		}, {
 			Name:     "will return a blank value",
 			DiceRoll: 1,
@@ -28,17 +28,17 @@ func TestOriginalWordListFetchWord(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		fetchedValue := diceware.OriginalWordlist.FetchWord(test.DiceRoll)
+		fetchedValue := wordlist.EFFShort.FetchWord(test.DiceRoll)
 		assert.Equal(test.Value, fetchedValue, test.Name)
 	}
 }
 
-func TestOriginalWordlistRolls(t *testing.T) {
-	assert.Equal(t, 5, diceware.OriginalWordlist.Rolls(), "Rolls should return 5")
+func TestEFFShortRolls(t *testing.T) {
+	assert.Equal(t, 4, wordlist.EFFShort.Rolls(), "Rolls should return 4")
 	assert.Equal(
 		t,
 		big.NewInt(int64(6)),
-		diceware.OriginalWordlist.SidesOfDice(),
+		wordlist.EFFShort.SidesOfDice(),
 		"SidesOfDice should return 6",
 	)
 }

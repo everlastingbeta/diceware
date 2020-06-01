@@ -25,12 +25,13 @@ import (
   "fmt"
 
   "github.com/everlastingbeta/diceware"
+  "github.com/everlastingbeta/diceware/wordlist"
 )
 
 func main() {
   // generate diceware passphrase of 8 words with a separator of "-" using the
   // EFF Long wordlist.
-  effLongPassphrase, err := diceware.RollWords(8, "-", diceware.EFFLongWordlist)
+  effLongPassphrase, err := diceware.RollWords(8, "-", wordlist.EFFLong)
   if err != nil {
     panic(err)
   }
@@ -39,7 +40,7 @@ func main() {
 
   // generate diceware passphrase of 8 words with a separator of "-" using the
   // EFF Long wordlist, with enhanced entropy.
-  effLongPassphrase, err = diceware.RollWords(8, "+", diceware.EFFLongWordlist, true)
+  effLongPassphrase, err = diceware.RollWords(8, "+", wordlist.EFFLong, true)
   if err != nil {
     panic(err)
   }
@@ -48,7 +49,7 @@ func main() {
 
   // generate diceware passphrase of 8 words with a separator of "-" using the
   // EFF short wordlist.
-  effShortPassphrase, err := diceware.RollWords(8, "-", diceware.EFFShortWordlist)
+  effShortPassphrase, err := diceware.RollWords(8, "-", wordlist.EFFShort)
   if err != nil {
     panic(err)
   }
@@ -57,7 +58,7 @@ func main() {
 
   // generate diceware passphrase of 8 words with a separator of "-" using the
   // EFF ShortPrefix wordlist.
-  effShortPrefixPassphrase, err := diceware.RollWords(8, "-", diceware.EFFShortPrefixWordlist)
+  effShortPrefixPassphrase, err := diceware.RollWords(8, "-", wordlist.EFFShortPrefix)
   if err != nil {
     panic(err)
   }
@@ -66,7 +67,7 @@ func main() {
 
   // generate diceware passphrase of 8 words with a separator of "-" using the
   // Original wordlist.
-  originalPassphrase, err := diceware.RollWords(8, "-", diceware.OriginalWordlist)
+  originalPassphrase, err := diceware.RollWords(8, "-", wordlist.Original)
   if err != nil {
     panic(err)
   }

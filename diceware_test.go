@@ -1,18 +1,19 @@
 package diceware_test
 
 import (
-	"fmt"
+	"errors"
 	"strings"
 	"testing"
 
 	"github.com/everlastingbeta/diceware"
+	"github.com/everlastingbeta/diceware/wordlist"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestRollWords(t *testing.T) {
 	assert := assert.New(t)
 
-	validWordlistMap := diceware.NewWordlistMap(
+	validWordlistMap := wordlist.NewMap(
 		1,
 		3,
 		map[int]string{
@@ -21,7 +22,7 @@ func TestRollWords(t *testing.T) {
 			3: "tests",
 		})
 
-	inValidWordlistMap := diceware.NewWordlistMap(
+	inValidWordlistMap := wordlist.NewMap(
 		2,
 		3,
 		map[int]string{
@@ -45,7 +46,7 @@ func TestRollWords(t *testing.T) {
 			WordCount: 6,
 		}, {
 			Name:      "Rolling several words with a custom invalid wordlist",
-			Error:     fmt.Errorf("invalid empty word fetched for roll"),
+			Error:     diceware.ErrInvalidWordFetched,
 			Separator: " ",
 			WordCount: 5,
 			Wordlist:  inValidWordlistMap,
@@ -58,18 +59,18 @@ func TestRollWords(t *testing.T) {
 			Name:      "Rolling several words with the original wordlist",
 			Separator: "_",
 			WordCount: 8,
-			Wordlist:  diceware.OriginalWordlist,
+			Wordlist:  wordlist.Original,
 		}, {
 			Name:      "Rolling several words with the EFF long wordlist",
 			Separator: ":",
 			WordCount: 6,
-			Wordlist:  diceware.EFFLongWordlist,
+			Wordlist:  wordlist.EFFLong,
 		}, {
 			Name:           "Rolling several words with the EFF long wordlist with enhanced entropy",
 			EnhanceEntropy: true,
 			Separator:      "-",
 			WordCount:      6,
-			Wordlist:       diceware.EFFLongWordlist,
+			Wordlist:       wordlist.EFFLong,
 		},
 	}
 
@@ -78,7 +79,7 @@ func TestRollWords(t *testing.T) {
 
 		if test.Error != nil {
 			// verifying that we can hit the two user defined errors in the library
-			assert.True(strings.Contains(err.Error(), test.Error.Error()), test.Name)
+			assert.True(errors.As(test.Error, &err))
 			continue
 		}
 

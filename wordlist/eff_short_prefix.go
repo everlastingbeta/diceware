@@ -1,8 +1,8 @@
-package diceware
+package wordlist
 
-// EFFShortPrefixWordlist defines the EFF defined 4 dice unique prefix word list
+// EFFShortPrefix defines the EFF defined 4 dice unique prefix word list
 // to be utilized for creating phrases for the diceware algorithm.
-var EFFShortPrefixWordlist = NewWordlistMap(
+var EFFShortPrefix = NewMap(
 	4,
 	6,
 	// obtained from https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases

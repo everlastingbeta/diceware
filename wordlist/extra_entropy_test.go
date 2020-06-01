@@ -1,14 +1,14 @@
-package diceware_test
+package wordlist_test
 
 import (
 	"math/big"
 	"testing"
 
-	"github.com/everlastingbeta/diceware"
+	"github.com/everlastingbeta/diceware/wordlist"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEFFShortPrefixWordListFetchWord(t *testing.T) {
+func TestExtraEntropyFetchWord(t *testing.T) {
 	assert := assert.New(t)
 
 	tests := []struct {
@@ -18,8 +18,8 @@ func TestEFFShortPrefixWordListFetchWord(t *testing.T) {
 	}{
 		{
 			Name:     "will return a value from the map",
-			DiceRoll: 1111,
-			Value:    "aardvark",
+			DiceRoll: 11,
+			Value:    "~",
 		}, {
 			Name:     "will return a blank value",
 			DiceRoll: 1,
@@ -28,17 +28,17 @@ func TestEFFShortPrefixWordListFetchWord(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		fetchedValue := diceware.EFFShortPrefixWordlist.FetchWord(test.DiceRoll)
+		fetchedValue := wordlist.ExtraEntropy.FetchWord(test.DiceRoll)
 		assert.Equal(test.Value, fetchedValue, test.Name)
 	}
 }
 
-func TestEFFShortPrefixWordlistRolls(t *testing.T) {
-	assert.Equal(t, 4, diceware.EFFShortPrefixWordlist.Rolls(), "Rolls should return 4")
+func TestExtraEntropyRolls(t *testing.T) {
+	assert.Equal(t, 2, wordlist.ExtraEntropy.Rolls(), "Rolls should return 2")
 	assert.Equal(
 		t,
 		big.NewInt(int64(6)),
-		diceware.EFFShortPrefixWordlist.SidesOfDice(),
+		wordlist.ExtraEntropy.SidesOfDice(),
 		"SidesOfDice should return 6",
 	)
 }

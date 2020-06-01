@@ -1,9 +1,9 @@
-package diceware
+package wordlist
 
-// ExtraEntropyWordlist defines a list of characters and numbers in a 2 dice
+// ExtraEntropy defines a list of characters and numbers in a 2 dice
 // pattern that can be utilized to pull random values that will in turn
 // be used to increase the entropy of other passphrases.
-var ExtraEntropyWordlist = NewWordlistMap(
+var ExtraEntropy = NewMap(
 	2,
 	6,
 	// inspiration came from http://diceware.com

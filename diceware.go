@@ -7,17 +7,32 @@ import (
 	"math"
 	"math/big"
 	"strings"
+
+	"github.com/everlastingbeta/diceware/wordlist"
 )
 
 var (
 	// ErrInvalidWordlist represents the error given when `RollWords` is called
 	// with a nil wordlist
 	ErrInvalidWordlist = errors.New("invalid nil wordlist given")
+	// ErrInvalidWordFetched represents the error given when a word is not
+	// returned from the internal wordlist's `FetchWord` method is called
+	ErrInvalidWordFetched = errors.New("invalid empty word fetched")
 )
 
-// ErrInvalidWordFetched returns an error message
-func ErrInvalidWordFetched(rollValue int) error {
-	return fmt.Errorf("invalid empty word fetched for roll: %d", rollValue)
+// Wordlist defines the methods required to implement a list of words that can
+// be utilized within the diceware implementation.
+type Wordlist interface {
+	// FetchWord describes the logic to fetch a word from the word list with the
+	// given dice roll value
+	FetchWord(int) string
+
+	// Rolls describes the number of dice that should be rolled to retrieve an
+	// appropriate word from the wordlist
+	Rolls() int
+
+	// SidesOfDice describes the maximum number on the dice to be rolled
+	SidesOfDice() *big.Int
 }
 
 // rollWord returns a string.
@@ -36,7 +51,7 @@ func rollWord(wordlist Wordlist) (string, error) {
 
 	word := wordlist.FetchWord(rollValue)
 	if len(word) == 0 {
-		return "", ErrInvalidWordFetched(rollValue)
+		return "", fmt.Errorf("%w for roll value: %d", ErrInvalidWordFetched, rollValue)
 	}
 
 	return word, nil
@@ -47,14 +62,14 @@ func rollWord(wordlist Wordlist) (string, error) {
 // wordCount is the number of words that should be returned.
 // separator is the character(s) used to separate each of the
 // passphrase words.
-// wordlist is the implementation of the `diceware.Wordlist` that will be
+// wl is the implementation of the `diceware.Wordlist` that will be
 // utilized in order to fetch the words for the final passphrase.
 // enhanceEntropy is the [optional] boolean required to add a random character
 // or number within the passphrase.  At minimum 1 word within the requested
 // passphrase will be modified.  If no enhanceEntropy value is passed in, then
 // it will default to false.
-func RollWords(wordCount int, separator string, wordlist Wordlist, enhanceEntropy ...bool) (string, error) {
-	if wordlist == nil {
+func RollWords(wordCount int, separator string, wl Wordlist, enhanceEntropy ...bool) (string, error) {
+	if wl == nil {
 		return "", ErrInvalidWordlist
 	}
 
@@ -64,7 +79,7 @@ func RollWords(wordCount int, separator string, wordlist Wordlist, enhanceEntrop
 
 	words := make([]string, wordCount)
 	for i := range words {
-		word, err := rollWord(wordlist)
+		word, err := rollWord(wl)
 		if err != nil {
 			return "", err
 		}
@@ -79,7 +94,7 @@ func RollWords(wordCount int, separator string, wordlist Wordlist, enhanceEntrop
 		}
 
 		for i := 0; i < int(transformedWords.Int64())+1; {
-			character, err := rollWord(ExtraEntropyWordlist)
+			character, err := rollWord(wordlist.ExtraEntropy)
 			if err != nil {
 				return "", err
 			}

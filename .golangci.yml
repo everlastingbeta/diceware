@@ -5,7 +5,6 @@ linters:
     - deadcode
     - depguard
     - dogsled
-    - dupl
     - errcheck
     - funlen
     - gochecknoinits
@@ -24,7 +23,6 @@ linters:
     - interfacer
     - lll
     - maligned
-    - misspell
     - nakedret
     - prealloc
     - scopelint
@@ -40,14 +38,6 @@ linters:
 
 issues:
   exclude-rules:
-    - path: wordlist_.*\.go
-      linters:
-        - funlen
-        - dupl
-        - gofmt
-        - goimports
-        - misspell
     - path: _test\.go
       linters:
-        - dupl
         - funlen

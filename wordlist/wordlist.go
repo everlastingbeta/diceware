@@ -1,25 +1,10 @@
-package diceware
+package wordlist
 
 import "math/big"
 
-// Wordlist defines the methods required to implement a list of words that can
-// be utilized within the diceware implementation.
-type Wordlist interface {
-	// FetchWord describes the logic to fetch a word from the word list with the
-	// given dice roll value
-	FetchWord(int) string
-
-	// Rolls describes the number of dice that should be rolled to retrieve an
-	// appropriate word from the wordlist
-	Rolls() int
-
-	// SidesOfDice describes the maximum number on the dice to be rolled
-	SidesOfDice() *big.Int
-}
-
-// WordlistMap defines the implementation of the Wordlist interface having
+// Map defines the implementation of the Wordlist interface having
 // a `map[int]string` be the main way of storing the wordlist in go.
-type WordlistMap struct {
+type Map struct {
 	// rolls represents the number of dice rolls are needed to create the number
 	// passed into the wordslist map to fetch a word.
 	rolls int
@@ -32,9 +17,9 @@ type WordlistMap struct {
 	words map[int]string
 }
 
-// NewWordlistMap returns an initialized WordlistMap object
-func NewWordlistMap(rolls, sidesOfDice int, words map[int]string) *WordlistMap {
-	return &WordlistMap{
+// NewMap returns an initialized Map object
+func NewMap(rolls, sidesOfDice int, words map[int]string) *Map {
+	return &Map{
 		rolls:       rolls,
 		sidesOfDice: big.NewInt(int64(sidesOfDice)),
 		words:       words,
@@ -44,7 +29,7 @@ func NewWordlistMap(rolls, sidesOfDice int, words map[int]string) *WordlistMap {
 // FetchWord returns a string.
 // It implements the logic for the Wordlist interface which pulls the correct
 // word from the internal wordlist.
-func (wl *WordlistMap) FetchWord(diceRoll int) string {
+func (wl *Map) FetchWord(diceRoll int) string {
 	word := wl.words[diceRoll]
 	return word
 }
@@ -53,13 +38,13 @@ func (wl *WordlistMap) FetchWord(diceRoll int) string {
 // It implements the logic for the Wordlist interface which gives the number of
 // dice rolls that should occur in order to create the correct number to
 // retrieve a word from the wordlist;
-func (wl *WordlistMap) Rolls() int {
+func (wl *Map) Rolls() int {
 	return wl.rolls
 }
 
 // SidesOfDice returns an int.
 // Implements the logic for the Wordlist interface which gives the number of
 // sides on the dice that will be rolled.
-func (wl *WordlistMap) SidesOfDice() *big.Int {
+func (wl *Map) SidesOfDice() *big.Int {
 	return wl.sidesOfDice
 }

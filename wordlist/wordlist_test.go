@@ -1,16 +1,16 @@
-package diceware_test
+package wordlist_test
 
 import (
 	"testing"
 
-	"github.com/everlastingbeta/diceware"
+	"github.com/everlastingbeta/diceware/wordlist"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWordlistMapFetchWord(t *testing.T) {
+func TestMapFetchWord(t *testing.T) {
 	assert := assert.New(t)
 
-	wordlistMap := diceware.NewWordlistMap(2, 6, map[int]string{11: "test"})
+	wordlistMap := wordlist.NewMap(2, 6, map[int]string{11: "test"})
 
 	tests := []struct {
 		Name     string
