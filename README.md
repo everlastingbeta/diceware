@@ -4,6 +4,8 @@ Simple golang library that allows for quick generation of diceware passphrases.
 
 [![GoDoc](https://godoc.org/github.com/everlastingbeta/diceware?status.svg)](https://godoc.org/github.com/everlastingbeta/diceware)
 [![Go Report Card](https://goreportcard.com/badge/everlastingbeta/diceware?style=flat-square)](https://goreportcard.com/report/everlastingbeta/diceware)
+![test](https://github.com/everlastingbeta/diceware/workflows/test/badge.svg)
+![golangci-lint](https://github.com/everlastingbeta/diceware/workflows/golangci-lint/badge.svg)
 
 ## Background Information
 
