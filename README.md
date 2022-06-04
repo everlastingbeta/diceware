@@ -81,7 +81,7 @@ func main() {
 
 ### Sample Output
 
-```stl
+```
 EFF Long wordlist passphrase:  playlist-wisplike-chive-coaster-caution-hypnoses-reliable-mangy
 EFF Long wordlist passphrase with enhanced entropy:  c:onsult+ma9roon+sizzl3e+sm-ugly+usea?ble+supermom+delusion+cozily
 EFF Short wordlist passphrase:  churn-wish-july-aroma-agile-curry-stain-boxer
