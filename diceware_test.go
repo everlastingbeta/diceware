@@ -1,7 +1,6 @@
 package diceware_test
 
 import (
-	"errors"
 	"strings"
 	"testing"
 
@@ -79,7 +78,7 @@ func TestRollWords(t *testing.T) {
 
 		if test.Error != nil {
 			// verifying that we can hit the two user defined errors in the library
-			assert.True(errors.As(test.Error, &err))
+			assert.Error(err)
 			continue
 		}
 
