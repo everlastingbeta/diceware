@@ -43,7 +43,7 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/everlastingbeta/diceware/wordlist"
+	"github.com/everlastingbeta/diceware/v2/wordlist"
 )
 
 // Common error definitions

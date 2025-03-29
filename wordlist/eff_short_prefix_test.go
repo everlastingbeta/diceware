@@ -4,7 +4,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/everlastingbeta/diceware/wordlist"
+	"github.com/everlastingbeta/diceware/v2/wordlist"
 	"github.com/stretchr/testify/assert"
 )
 

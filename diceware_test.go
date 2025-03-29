@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/everlastingbeta/diceware"
-	"github.com/everlastingbeta/diceware/wordlist"
+	"github.com/everlastingbeta/diceware/v2"
+	"github.com/everlastingbeta/diceware/v2/wordlist"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
