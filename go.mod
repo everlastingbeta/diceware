@@ -1,4 +1,4 @@
-module github.com/everlastingbeta/diceware
+module github.com/everlastingbeta/diceware/v2
 
 go 1.24
 
