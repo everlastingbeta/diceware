@@ -1,136 +1,91 @@
-# Version declaration - required for v2 configuration
 version: "2"
 
-# Controls how golangci-lint executes linters
 run:
-  # Enables parallel execution of linters that support it
   allow-parallel-runners: true
-  # Enables serial execution of linters that don't support parallel execution
   allow-serial-runners: true
 
-# Configuration for linters
 linters:
-  # Disables default linters - only explicitly enabled linters will run
-  default: none
-  # List of linters to explicitly enable
   enable:
-    - asasalint     # Detects usage of assert.Equal for slice/array and strings
-    - asciicheck    # Checks that code doesn't contain non-ASCII identifiers
-    - bidichk       # Checks for dangerous unicode character sequences
-    - bodyclose     # Checks whether HTTP response bodies are closed
-    - dogsled       # Checks for too many blank identifiers in variable assignment
-    - durationcheck # Checks for two durations multiplied together
-    - errcheck      # Ensures that errors returned from functions are checked
-    - errchkjson    # Checks types passed to encoding/json functions
-    - errname       # Checks that error variables are prefixed with Err
-    - errorlint     # Finds code that will cause problems with the error wrapping scheme
-    - forbidigo     # Forbids identifiers
-    - forcetypeassert # Forces type assertion to include a comma ok
-    - gocheckcompilerdirectives # Checks compiler directive comments format
-    - gochecknoinits # Checks that no init functions are present
-    - gochecksumtype # Checks sum type declarations
-    - goconst       # Finds repeated strings that could be constants
-    - gocritic      # Provides many diagnostics
-    - goheader      # Checks that file headers match a pattern
-    - goprintffuncname # Checks that printf-like functions are named correctly
-    - gosec         # Inspects source code for security problems
-    - gosmopolitan  # Reports certain i18n/l10n anti-patterns
-    - govet         # Reports suspicious constructs
-    - grouper       # Analyzes expression groups
-    - importas      # Enforces consistent import aliases
-    - inamedparam   # Reports interfaces with unnamed method parameters
-    - ineffassign   # Detects unused variable assignments
-    - intrange      # Checks for integer range checks
-    - ireturn       # Checks that interfaces being returned are concrete types
-    - loggercheck   # Checks key value pairs for common logger libraries
-    - makezero      # Finds slice declarations with non-zero initial capacity
-    - mirror        # Reports wrong mirror patterns
-    - musttag       # Enforces field tags in (un)marshaled structs
-    - nakedret      # Finds naked returns
-    - nilerr        # Finds code that returns nil even if error is not nil
-    - nilnil        # Checks that there is no simultaneous return of nil error and invalid value
-    - noctx         # Finds HTTP requests without context.Context
-    - nolintlint    # Reports ill-formed or non-existent nolint directives
-    - nosprintfhostport # Checks for misuse of Sprintf to construct host:port strings
-    - perfsprint    # Checks that fmt.Sprintf can be replaced with a faster alternative
-    - prealloc      # Finds slice declarations that could be pre-allocated
-    - predeclared   # Finds code that shadows predeclared identifiers
-    - promlinter    # Checks Prometheus metrics naming
-    - protogetter   # Detects proto getter methods
-    - reassign      # Checks for reassigning variables
-    - revive        # Fast, configurable, extensible, flexible linter
-    - rowserrcheck  # Checks whether Rows.Err is checked after iteration
-    - spancheck     # Checks for mistakes with OpenTelemetry spans
-    - sqlclosecheck # Checks that SQL rows/statements are closed
-    - staticcheck   # Go static analysis, applying a ton of static analysis checks
-    - tagliatelle   # Checks struct tags for conformity to a given style
-    - testableexamples # Checks if examples are testable
-    - testifylint   # Checks for common mistakes with testify
-    - thelper       # Checks for test helpers without t.Helper()
-    - tparallel     # Checks for appropriate use of t.Parallel()
-    - unconvert     # Removes unnecessary type conversions
-    - unparam       # Reports unused function parameters
-    - unused        # Checks for unused constants, variables, functions and types
-    - usestdlibvars # Detects the possibility to use variables from the stdlib
-    - wastedassign  # Finds wasted assignment statements
-    - whitespace    # Checks for unnecessary whitespace
-    - wrapcheck     # Ensures errors are wrapped
-    - wsl           # Enforces empty lines at the right places
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - copyloopvar
+    - dogsled
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - forbidigo
+    - forcetypeassert
+    - gocheckcompilerdirectives
+    - gochecknoinits
+    - gochecksumtype
+    - goconst
+    - gocritic
+    - goheader
+    - goprintffuncname
+    - gosec
+    - gosmopolitan
+    - govet
+    - grouper
+    - importas
+    - inamedparam
+    - ineffassign
+    - intrange
+    - ireturn
+    - loggercheck
+    - makezero
+    - mirror
+    - musttag
+    - nakedret
+    - nilerr
+    - nilnil
+    - noctx
+    - nolintlint
+    - nosprintfhostport
+    - perfsprint
+    - prealloc
+    - predeclared
+    - promlinter
+    - protogetter
+    - reassign
+    - revive
+    - rowserrcheck
+    - spancheck
+    - sqlclosecheck
+    - staticcheck
+    - tagliatelle
+    - testableexamples
+    - testifylint
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - wastedassign
+    - whitespace
+    - wrapcheck
+    - wsl_v5
 
-  # Custom settings for specific linters
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - path: '_test\.go'
+        linters:
+          - dupl
+
   settings:
-    nestif:
-      # Minimum complexity to report
-      min-complexity: 3
     testifylint:
-      # Enable all testifylint checks
       enable-all: true
 
-  # Rules for excluding linters in specific scenarios
-  exclusions:
-    # How to handle generated code: 'strict', 'lax', or 'off'
-    generated: lax
-    # Predefined sets of exclusions
-    presets:
-      - comments            # Excludes common comment-related issues
-      - common-false-positives # Excludes common false positives
-      - legacy              # Excludes legacy code patterns
-      - std-error-handling  # Excludes standard error handling patterns
-    # Custom exclusion rules combining linters and paths
-    rules:
-      # Exclude dupl linter from test files
-      - linters:
-          - dupl
-        path: (.+)_test\.go
-      # Exclude gosec from seeded.go file
-      - linters:
-          - gosec
-        path: seeded.go
-    # Path-based exclusions
-    paths:
-      - third_party$    # Exclude third-party code
-      - builtin$        # Exclude built-in code
-      - examples$       # Exclude examples
-
-# Configuration for issue reporting
 issues:
-  # Maximum number of issues to report per linter
   max-issues-per-linter: 50
-  # Maximum number of identical issues to report
   max-same-issues: 10
-
-# Configuration for code formatters (new in v2)
-formatters:
-  # List of formatters to enable
-  enable:
-    - gci        # Controls Go package imports ordering
-    - goimports  # Updates imports and formats code
-  # Rules for excluding formatters in specific scenarios
-  exclusions:
-    # How to handle generated code
-    generated: lax
-    # Path-based exclusions
-    paths:
-      - third_party$  # Exclude third-party code
-      - builtin$      # Exclude built-in code
-      - examples$     # Exclude examples
