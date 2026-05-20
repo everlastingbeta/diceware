@@ -1,6 +1,3 @@
-// Package diceware_test provides tests for the diceware package.
-// These tests verify the correctness, security, and robustness of
-// the diceware passphrase generation algorithm implementation.
 package diceware_test
 
 import (
@@ -17,15 +14,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// MockRandomSource is a mock implementation of the RandomSource interface for testing.
-// It allows tests to use predetermined random values instead of actual random generation,
-// enabling deterministic and reproducible tests.
+// MockRandomSource returns scripted values from testify/mock instead of real randomness.
 type MockRandomSource struct {
 	mock.Mock
 }
 
-// GetRandom implements the RandomSource interface by returning predetermined values
-// specified in test setup.
 func (m *MockRandomSource) GetRandom(maxVal *big.Int) (*big.Int, error) {
 	args := m.Called(maxVal)
 	if args.Get(0) == nil {
@@ -44,29 +37,21 @@ func (m *MockRandomSource) GetRandom(maxVal *big.Int) (*big.Int, error) {
 	return result, nil
 }
 
-// MockWordlist is a mock implementation of the Wordlist interface for testing.
-// It allows tests to verify correct interactions with the wordlist without
-// using actual wordlists.
+// MockWordlist is a scripted Wordlist for verifying RollWord/RollWords behavior.
 type MockWordlist struct {
 	mock.Mock
 }
 
-// FetchWord implements the Wordlist interface by returning predetermined words
-// specified in test setup.
 func (m *MockWordlist) FetchWord(rollValue int) string {
 	args := m.Called(rollValue)
 	return args.String(0)
 }
 
-// Rolls implements the Wordlist interface by returning a predetermined number
-// of rolls.
 func (m *MockWordlist) Rolls() int {
 	args := m.Called()
 	return args.Int(0)
 }
 
-// SidesOfDice implements the Wordlist interface by returning a predetermined
-// number of sides per die.
 func (m *MockWordlist) SidesOfDice() *big.Int {
 	args := m.Called()
 
@@ -78,43 +63,28 @@ func (m *MockWordlist) SidesOfDice() *big.Int {
 	return result
 }
 
-// TestRollWords tests the main passphrase generation function with various
-// configurations, including error cases and edge cases.
-//
-// This test covers:
-// - Invalid inputs (nil wordlist, invalid word count)
-// - Error handling for random generation failures
-// - Error handling for invalid words
-// - Basic passphrase generation
-// - Enhanced entropy passphrase generation
 func TestRollWords(t *testing.T) {
 	assert := assert.New(t)
 
-	// Create a valid mock wordlist that always returns "test" for any roll value
 	validWordlist := &MockWordlist{}
 	validWordlist.On("Rolls").Return(1)
 	validWordlist.On("SidesOfDice").Return(big.NewInt(6))
 	validWordlist.On("FetchWord", mock.Anything).Return("test")
 
-	// Create an invalid mock wordlist that always returns an empty string
 	invalidWordlist := &MockWordlist{}
 	invalidWordlist.On("Rolls").Return(1)
 	invalidWordlist.On("SidesOfDice").Return(big.NewInt(6))
 	invalidWordlist.On("FetchWord", mock.Anything).Return("")
 
-	// Create a mock random source that always returns 0
 	mockRandom := &MockRandomSource{}
 	mockRandom.On("GetRandom", mock.Anything).Return(big.NewInt(0), nil)
 
-	// Create predictable random source for enhanced entropy
 	enhancedRandom := &MockRandomSource{}
 	enhancedRandom.On("GetRandom", mock.Anything).Return(big.NewInt(0), nil)
 
-	// Create a random source that always fails
 	failingRandom := &MockRandomSource{}
 	failingRandom.On("GetRandom", mock.Anything).Return(nil, errors.New("random failure"))
 
-	// Test cases for RollWords function
 	tests := []struct {
 		Name           string
 		Options        diceware.PassphraseOptions
@@ -150,15 +120,13 @@ func TestRollWords(t *testing.T) {
 		{
 			Name:     "Enhanced entropy",
 			Options:  diceware.PassphraseOptions{WordCount: 3, Separator: "-", Wordlist: validWordlist, EnhanceEntropy: true, RandomSource: enhancedRandom},
-			Expected: "t~est-test-test", // Actual enhancement would depend on mocked random values
+			Expected: "t~est-test-test",
 		},
 	}
 
-	// Execute the test cases
 	for _, test := range tests {
 		result, err := diceware.RollWords(test.Options)
 
-		// Verify the results using switch statement instead of if-else
 		switch {
 		case test.ExpectedError != nil:
 			assert.Equal(test.ExpectedError, err, test.Name)
@@ -172,17 +140,9 @@ func TestRollWords(t *testing.T) {
 	}
 }
 
-// TestSimpleRollWords tests the backward-compatible SimpleRollWords function.
-// This ensures that the simplified API continues to work correctly.
-//
-// This test covers:
-// - Basic functionality with a custom wordlist
-// - Integration with all built-in wordlists (Original, EFF Long, EFF Short)
-// - Enhanced entropy option
 func TestSimpleRollWords(t *testing.T) {
 	assert := assert.New(t)
 
-	// Create a simple custom wordlist for testing
 	validWordlistMap := wordlist.NewMap(
 		1,
 		3,
@@ -192,13 +152,11 @@ func TestSimpleRollWords(t *testing.T) {
 			3: "tests",
 		})
 
-	// Test basic functionality
 	passphrase, err := diceware.SimpleRollWords(5, ":", validWordlistMap)
 	require.NoError(t, err)
 	assert.NotEmpty(passphrase)
 	assert.Len(strings.Split(passphrase, ":"), 5, "Expected 5 words")
 
-	// Test integration with built-in wordlists
 	tests := []struct {
 		Name      string
 		WordCount int
@@ -225,16 +183,13 @@ func TestSimpleRollWords(t *testing.T) {
 		},
 	}
 
-	// Execute the tests with and without enhanced entropy
 	for _, test := range tests {
-		// Test without enhanced entropy
 		passphrase, err := diceware.SimpleRollWords(test.WordCount, test.Separator, test.Wordlist)
 		if assert.NoError(err, test.Name) {
 			assert.NotEmpty(passphrase, test.Name)
 			assert.Len(strings.Split(passphrase, test.Separator), test.WordCount, test.Name)
 		}
 
-		// Test with enhanced entropy
 		passphrase, err = diceware.SimpleRollWords(test.WordCount, test.Separator, test.Wordlist, true)
 		if assert.NoError(err, test.Name+" with enhanced entropy") {
 			assert.NotEmpty(passphrase, test.Name+" with enhanced entropy")
@@ -243,9 +198,6 @@ func TestSimpleRollWords(t *testing.T) {
 	}
 }
 
-// TestDefaultOptions ensures that the default options provide sensible values.
-// This test verifies that users get reasonable defaults if they don't specify
-// custom options.
 func TestDefaultOptions(t *testing.T) {
 	assert := assert.New(t)
 
@@ -257,11 +209,8 @@ func TestDefaultOptions(t *testing.T) {
 	assert.NotNil(defaults.RandomSource)
 }
 
-// BenchmarkRollWords measures the performance of passphrase generation.
-// This helps identify potential performance bottlenecks and track
-// performance changes over time.
 func BenchmarkRollWords(b *testing.B) {
-	for range b.N {
+	for b.Loop() {
 		_, _ = diceware.SimpleRollWords(6, " ", wordlist.EFFLong)
 	}
 }

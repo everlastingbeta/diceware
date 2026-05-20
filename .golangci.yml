@@ -81,6 +81,10 @@ linters:
       - path: '_test\.go'
         linters:
           - dupl
+      # Wordlist data files are dictionaries: repeated words are inherent to the data, not duplication.
+      - path: 'wordlist/(eff_long|eff_short|eff_short_prefix|original|extra_entropy)\.go'
+        linters:
+          - goconst
 
   settings:
     testifylint:

@@ -2,22 +2,15 @@ package wordlist
 
 import "math/big"
 
-// Map defines the implementation of the Wordlist interface having
-// a `map[int]string` be the main way of storing the wordlist in go.
+// Map is a Wordlist backed by a map from dice-roll values to words.
 type Map struct {
-	// rolls represents the number of dice rolls are needed to create the number
-	// passed into the wordslist map to fetch a word.
-	rolls int
-
-	// sidesOfDice represents the maximum number of sides on the dice that is
-	// rolled.
+	rolls       int
 	sidesOfDice *big.Int
-
-	// words represents the wordlist represented in a map.
-	words map[int]string
+	words       map[int]string
 }
 
-// NewMap returns an initialized Map object
+// NewMap returns a Map configured with the given roll count, die size, and
+// roll-value-to-word mapping.
 func NewMap(rolls, sidesOfDice int, words map[int]string) *Map {
 	return &Map{
 		rolls:       rolls,
@@ -26,25 +19,17 @@ func NewMap(rolls, sidesOfDice int, words map[int]string) *Map {
 	}
 }
 
-// FetchWord returns a string.
-// It implements the logic for the Wordlist interface which pulls the correct
-// word from the internal wordlist.
+// FetchWord returns the word for diceRoll, or "" if none is mapped.
 func (wl *Map) FetchWord(diceRoll int) string {
-	word := wl.words[diceRoll]
-	return word
+	return wl.words[diceRoll]
 }
 
-// Rolls returns an int.
-// It implements the logic for the Wordlist interface which gives the number of
-// dice rolls that should occur in order to create the correct number to
-// retrieve a word from the wordlist;
+// Rolls returns the number of dice rolls this wordlist expects per word.
 func (wl *Map) Rolls() int {
 	return wl.rolls
 }
 
-// SidesOfDice returns an int.
-// Implements the logic for the Wordlist interface which gives the number of
-// sides on the dice that will be rolled.
+// SidesOfDice returns the number of sides on each die.
 func (wl *Map) SidesOfDice() *big.Int {
 	return wl.sidesOfDice
 }
